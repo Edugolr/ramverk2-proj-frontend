@@ -23,10 +23,9 @@
                           style="max-width: 10rem;"
                           class="mb-2"
                         >
-                          <b-card-text>
-                              <p :id="card.id" >Value: {{card.price}}:-</p>
-                          </b-card-text>
+
                           <div slot="footer"><small class="text-muted">
+                               <p class="balance text-center text-monospace font-weight-bold">${{card.price.toFixed(2)}}</p>
                               <b-button  v-on:click="sell(card.player)" variant="danger">Sell card</b-button>
                           </small></div>
                         </b-card>
@@ -35,32 +34,28 @@
             </b-col>
             <b-col>
                 <h2>Balance</h2>
-                <b-alert variant="success" show> <pre>Balance: {{depot.balance}}:-</pre>
-                <b-form-input v-model="input.amount" size="sm" class="mr-sm-2" type="text" placeholder="Add money" /><br>
-                <b-button size="sm" variant="info" class="my-2 my-sm-0" type="submit" v-on:click="addMoney()">Add</b-button></b-alert>
+                <b-alert variant="success" show>
+                    <p class="mx-auto balance text-center text-monospace font-weight-bold">${{depot.balance.toFixed(2)}}</p></b-alert>
+                <b-form @submit="addMoney">
+                  <b-input-group
+                    id="exampleInputGroup1"
+                    prepend="$" append=".00"
+
+                    >
+                    <b-input-group-text slot="append"><strong class="text-danger">!</strong></b-input-group-text>
+                    <b-form-input
+                      id="addmoney"
+                      type="number"
+                      v-model="input.amount"
+                      required
+                      placeholder="Enter amount to deposit" />
+                  </b-input-group><br>
+                   <b-button variant="success" type="submit" >Add money</b-button>
+              </b-form>
+
             </b-col>
           </b-row>
         </b-container>
-<!--
-        <b-container class="bv-example-row">
-          <b-row>
-            <b-col><img src="https://www.gravatar.com/avatar/HASH" alt="gravtar"></b-col>
-            <b-col><p>{{user.firstname}}  {{user.lastname}}</p></b-col>
-          </b-row>
-        </b-container>
-        <b-container class="bv-example-row">
-          <b-row>
-
-          </b-row>
-
-        </b-container>
-        <div class="header">
-            <div class="gravatar">
-            </div>
-            <div class="name">
-            </div>
-        </div> -->
-
     </div>
     <div v-else class="">
         You are not logged in
@@ -90,13 +85,15 @@ export default {
     }
   },
   methods: {
-      addMoney() {
+      addMoney(evt) {
+          evt.preventDefault();
+          alert("Your balance increased with: " + this.input.amount + ":-")
           let self = this;
           axios.defaults.headers.common['Authorization'] =
                               'Bearer ' + localStorage.getItem('jwtToken');
           axios({
             method: 'post',
-            url: 'http://localhost:1337/depot/addmoney/',
+            url: 'https://backend.chai17.me/depot/addmoney/',
             withCredentials: false,
             crossdomain: true,
             data: {
@@ -118,7 +115,7 @@ export default {
                                 'Bearer ' + localStorage.getItem('jwtToken');
             axios({
               method: 'post',
-              url: 'http://localhost:1337/card/sell',
+              url: 'https://backend.chai17.me/card/sell',
               withCredentials: false,
               crossdomain: true,
               data: {
@@ -140,10 +137,10 @@ export default {
         if (localStorage.getItem('userId')) {
           axios.defaults.headers.common['Authorization'] =
                               'Bearer ' + localStorage.getItem('jwtToken');
-            axios.get('http://localhost:1337/user/' + localStorage.getItem('userId'))
+            axios.get('https://backend.chai17.me/user/' + localStorage.getItem('userId'))
             .then((res) => {
                 self.user = res.data
-              return axios.get('http://localhost:1337/depot/' + self.user.depots[0].id);
+              return axios.get('https://backend.chai17.me/depot/' + self.user.depots[0].id);
             })
             .then((res) => {
                 self.depot = res.data
@@ -160,30 +157,31 @@ export default {
             console.log('and with status code: ', JWR.statusCode);
 
         }),
+        self.$io.socket.get('/card/subscribe', function(res) {
+              console.log(res);
+          });
         self.$io.socket.on('card', function(msg){
 
              // call it again after one second
              if (self.depot.cards) {
                  for (var i = 0; i < self.depot.cards.length; i++) {
 
-                     if (self.depot.cards[i].id == msg.data.id) {
-                         self.depot.cards[i].price = msg.data.price
+                     if (self.depot.cards[i].id == msg.id) {
+                         self.depot.cards[i].price = msg.price
                      }
                  }
              }
 
         })
       // axios
-      //   .get('http://localhost:1337/user/' + this.id)
+      //   .get('https://backend.chai17.me/user/' + this.id)
       //   .then(response => (this.user = response.data))
       //   .catch(error => console.log(error))
   }
 };
 </script>
 <style media="screen">
-    .teamLogo {
-
-    }
-    .cards {
-    }
+.balance {
+    font-size: large;
+}
 </style>

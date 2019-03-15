@@ -3,13 +3,13 @@
       <template>
           <div >
           <b-navbar toggleable="lg" type="dark" variant="info">
-            <b-navbar-brand href="/">Card Trader</b-navbar-brand>
+            <b-navbar-brand href="/">CardMarket</b-navbar-brand>
 
             <b-navbar-toggle target="nav_collapse" />
 
             <b-collapse is-nav id="nav_collapse">
               <b-navbar-nav>
-                <b-nav-item v-if="$store.getters.loginStatus === false" href="/user/login" >Login</b-nav-item>
+                <b-nav-item v-if="$store.getters.loginStatus === false" href="/user/login" >Login/Register</b-nav-item>
                 <b-nav-item v-if="$store.getters.loginStatus" href="/user/profile" >Depot</b-nav-item>
                 <b-nav-item v-if="$store.getters.loginStatus" href="/market" >Market</b-nav-item>
               </b-navbar-nav>

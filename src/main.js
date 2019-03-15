@@ -15,8 +15,9 @@ var sailsIOClient = require('sails.io.js');
 // Instantiate the socket client (`io`)
 // (for now, you must explicitly pass in the socket.io client when using this library from Node.js)
 var io = sailsIOClient(socketIOClient);
-io.sails.url = 'http://localhost:1337';
+io.sails.url = 'https://backend.chai17.me';
 Vue.prototype.$io = io;
+Vue.prototype.$chart = '';
 Vue.use(lsWatcher, { prefix: "" })
 Vue.config.productionTip = false;
 

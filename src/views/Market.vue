@@ -21,10 +21,10 @@
                             style="max-width: 10rem;"
                             class="mb-2"
                           >
-                            <b-card-text>
-                                <p :id="card.id">Value: {{card.price}}:-</p>
-                            </b-card-text>
+
+            
                              <div slot="footer"><small class="text-muted">
+                                 <p class="balance text-center text-monospace font-weight-bold">${{card.price.toFixed(2)}}</p>
                                  <b-button v-if="card.owner" v-on:click="" variant="danger">Sold</b-button>
                                  <b-button v-else v-on:click="buy(card.player)" variant="success">Buy card</b-button>
                              </small></div>
@@ -33,7 +33,8 @@
                 </div>
             </b-col>
             <b-col>
-                <h1>Chart</h1>
+                <!-- <CardChart/> -->
+                <h2>Chart</h2>
                 <div id="container" style="width:100%; height:400px;"></div>
             </b-col>
           </b-row>
@@ -48,7 +49,7 @@
 
 <script>
 // @ is an alias to /src
-
+import CardChart from '@/components/CardChart.vue'
 var Highcharts = require('highcharts/highstock');
 
 // Load Highmaps as a module
@@ -57,10 +58,13 @@ var moment = require('moment');
 export default {
 
   name: "market",
+  // components: {
+  //     CardChart
+  // },
   data() {
     return {
         cards: [],
-        chart: JSON.parse(localStorage.getItem('chart')) || null
+        chart: null
     }
   },
   methods: {
@@ -70,7 +74,7 @@ export default {
                               'Bearer ' + localStorage.getItem('jwtToken');
           axios({
             method: 'post',
-            url: 'http://localhost:1337/card/buy',
+            url: 'https://backend.chai17.me/card/buy',
             withCredentials: false,
             crossdomain: true,
             data: {
@@ -80,7 +84,6 @@ export default {
           })
             .then(function (res) {
                 self.getNotOwnedCards()
-              console.log(res.data);
             })
             .catch(function (error) {
               console.log(error);
@@ -90,7 +93,7 @@ export default {
             let self = this;
                 axios.defaults.headers.common['Authorization'] =
                                   'Bearer ' + localStorage.getItem('jwtToken');
-                axios.get('http://localhost:1337/card/')
+                axios.get('https://backend.chai17.me/card/')
                 .then((res) => {
                     self.cards = res.data
 
@@ -105,16 +108,15 @@ export default {
 
           axios.defaults.headers.common['Authorization'] =
                             'Bearer ' + localStorage.getItem('jwtToken');
-          axios.get('http://localhost:1337/card/')
+          axios.get('https://backend.chai17.me/card/')
           .then((res) => {
               self.cards = res.data
-              console.log(self.cards);
+              // console.log(self.cards);
           })
           .catch((err) => {
               console.log(err)
           });
-          localStorage.setItem('chart', JSON.stringify(self.chart))
-          document.addEventListener('DOMContentLoaded', function() {
+
           self.chart = Highcharts.chart('container', {
               chart: {
                   type: 'line',
@@ -148,11 +150,13 @@ export default {
                   {
                       name: 'Jake Allen',
                       data: [],
+                      visible: false
 
                 },
                 {
                     name: 'Tage Thompson',
-                    data: []
+                    data: [],
+                    visible: false,
                 },
                 {
                     name: 'Joe Sakic',
@@ -160,17 +164,20 @@ export default {
                 }
             ]
           });
-      });
+
         self.$io.socket.get('/card', function serverResponded (body, JWR) {
 
             console.log('Sails responded with: ', body);
             console.log('with headers: ', JWR.headers);
             console.log('and with status code: ', JWR.statusCode);
-
         }),
+        self.$io.socket.get('/card/subscribe', function(res) {
+              console.log(res);
+          });
 
         self.$io.socket.on('card', function(msg){
-
+            // console.log(msg);
+            // console.log(self.chart);
              // call it again after one second
             for (var i = 0; i < self.cards.length; i++) {
                 var series = self.chart.series[i],
@@ -178,16 +185,17 @@ export default {
                  shift = series.data.length > 200;
 
 
-                if (self.cards[i].id == msg.data.id) {
-                    self.chart.series[i].addPoint(msg.data.price, true);
-                    self.cards[i].price = msg.data.price
+                if (self.cards[i].id == msg.id) {
+                    self.chart.series[i].addPoint(msg.price, true);
+                    self.cards[i].price = msg.price
                 }
 
             }
         })
+
         }
       // axios
-      //   .get('http://localhost:1337/user/' + this.id)
+      //   .get('https://backend.chai17.me/user/' + this.id)
       //   .then(response => (this.user = response.data))
       //   .catch(error => console.log(error))
 };

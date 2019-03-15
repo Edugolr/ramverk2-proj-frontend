@@ -1,5 +1,6 @@
 # frontend-trading
 
+
 ## Project setup
 ```
 npm install
