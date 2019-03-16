@@ -12,7 +12,7 @@
                        description="We'll never share your email with anyone else."
                      >
                        <b-form-input
-                         id="exampleInput1"
+                         id="emailLogin"
                          type="email"
                          v-model="log.email"
                          required
@@ -26,14 +26,14 @@
                         description="We'll never share your password with anyone else."
                         >
                        <b-form-input
-                         id="exampleInput2"
+                         id="passwordLogin"
                          type="password"
                          v-model="log.password"
                          required
                          placeholder="Enter password" />
                      </b-form-group>
-                     <b-button variant="success" type="submit">Login</b-button>
-                     <b-button class="ml-2" type="reset" variant="danger">Reset</b-button>
+                     <b-button id="submitLogin" variant="success" type="submit">Login</b-button>
+                     <b-button id="submitReset" class="ml-2" type="reset" variant="danger">Reset</b-button>
                  </b-form>
 
                 </b-tab>
@@ -135,6 +135,10 @@
                 /* Reset our form values */
                 this.log.email = ''
                 this.log.password = ''
+                this.reg.email = ''
+                this.reg.password = ''
+                this.log.firstname = ''
+
                 /* Trick to reset/clear native browser form validation state */
                 this.show = false
                 this.$nextTick(() => {
@@ -157,12 +161,13 @@
                 const user = response.data.user;
                 localStorage.setItem('jwtToken', token);
                 localStorage.setItem('userId', user.id);
+                localStorage.setItem('userEmail', user.email);
                 localStorage.setItem('isLoggedIn', true);
                 self.$store.commit('changeState', true);
                 self.$store.commit('changeEmail', user.email)
 
                 self.$router.push('/user/profile');
-                console.log(localStorage.getItem("userId"));
+                console.log(localStorage.getItem("jwtToken"));
               })
               .catch(function (error) {
                 localStorage.setItem('jwtToken', false)

@@ -1,38 +1,34 @@
-<template>
-<div>
-  <b-jumbotron bg-variant="light" text-variant="dark" border-variant="info">
-    <template slot="header">CardMarket</template>
-
-    <template slot="lead">
+<template class="page">
+    <div class="jumbotron jumbotron-fluid text-dark bg-light border border-info">
+      <div class="container">
+        <h1 class="display-4">Card Market</h1>
         <p>
          This is a project in the BTH course Ramverk2
           <a href="https://dbwebb.se/kurser/ramverk2-v2" target="_blank" rel="noopener"
             >Course info</a
           >.
         </p>
-    </template>
-
-    <hr class="my-4" />
-    <h3>Github repos</h3>
-    <ul>
-      <li>
-        <a
-          href="https://github.com/Edugolr/ramverk2-proj-frontend"
-          target="_blank"
-          rel="noopener"
-          >frontend</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/Edugolr/ramverk2-proj-backend"
-          target="_blank"
-          rel="noopener"
-          >backend</a
-        >
-      </li>
-    </ul>
-  </b-jumbotron>
+        <hr class="my-4" />
+        <h3>Github repos</h3>
+        <ul>
+          <li>
+            <a
+              href="https://github.com/Edugolr/ramverk2-proj-frontend"
+              target="_blank"
+              rel="noopener"
+              >frontend</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://github.com/Edugolr/ramverk2-proj-backend"
+              target="_blank"
+              rel="noopener"
+              >backend</a
+            >
+          </li>
+        </ul>
+     </div>
 </div>
 </template>
 
@@ -49,10 +45,8 @@ export default {
     .logo {
         width: 10%;
         max-height: 92vh
-    }
-    .jumbotron {
-        /* background-image: url('../assets/jumbo.jpg') */
-    }
+    },
+
     h3 {
       margin: 40px 0 0;
     }

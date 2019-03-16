@@ -1,5 +1,5 @@
 <template>
-    <div v-if="$store.getters.loginStatus" class="container mt-5">
+    <div v-if="token" class="container mt-5">
         <b-container class="">
             <b-row>
                 <b-col class="">
@@ -39,10 +39,10 @@
                 <b-form @submit="addMoney">
                   <b-input-group
                     id="exampleInputGroup1"
-                    prepend="$" append=".00"
+                    prepend="$"
 
                     >
-                    <b-input-group-text slot="append"><strong class="text-danger">!</strong></b-input-group-text>
+
                     <b-form-input
                       id="addmoney"
                       type="number"
@@ -81,7 +81,8 @@ export default {
       userId: localStorage.getItem('userId'),
       user: [],
       depot: [],
-      balance: 0
+      balance: 0,
+      token: localStorage.getItem('jwtToken') || null
     }
   },
   methods: {
@@ -119,7 +120,7 @@ export default {
               withCredentials: false,
               crossdomain: true,
               data: {
-                  userId: localStorage.getItem('userId'),
+                  userEmail: localStorage.getItem('userEmail'),
                   name: name
               }
             })

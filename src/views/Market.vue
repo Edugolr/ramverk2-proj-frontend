@@ -22,7 +22,7 @@
                             class="mb-2"
                           >
 
-            
+
                              <div slot="footer"><small class="text-muted">
                                  <p class="balance text-center text-monospace font-weight-bold">${{card.price.toFixed(2)}}</p>
                                  <b-button v-if="card.owner" v-on:click="" variant="danger">Sold</b-button>
@@ -78,7 +78,7 @@ export default {
             withCredentials: false,
             crossdomain: true,
             data: {
-                userId: localStorage.getItem('userId'),
+                userEmail: localStorage.getItem('userEmail'),
                 name: name
             }
           })
