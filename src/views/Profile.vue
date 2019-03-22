@@ -35,7 +35,7 @@
             <b-col>
                 <h2>Balance</h2>
                 <b-alert variant="success" show>
-                    <p class="mx-auto balance text-center text-monospace font-weight-bold">${{depot.balance.toFixed(2)}}</p></b-alert>
+                    <p v-if="depot.balance"class="mx-auto balance text-center text-monospace font-weight-bold">${{depot.balance.toFixed(2)}}</p></b-alert>
                 <b-form @submit="addMoney">
                   <b-input-group
                     id="exampleInputGroup1"
@@ -48,6 +48,7 @@
                       type="number"
                       v-model="input.amount"
                       required
+                      min="1"
                       placeholder="Enter amount to deposit" />
                   </b-input-group><br>
                    <b-button variant="success" type="submit" >Add money</b-button>

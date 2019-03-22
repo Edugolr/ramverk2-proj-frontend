@@ -22,7 +22,7 @@
                   <b-dropdown-item href="/user/profile">Depot</b-dropdown-item>
                   <b-dropdown-item v-if="$store.getters.loginStatus"  v-on:click="logout()" href="/" >Logout</b-dropdown-item>
                 </b-nav-item-dropdown>
-                <v-gravatar v-if="$store.getters.loginStatus" :email="$store.getters.email" />
+                <v-gravatar :size="80" class="responsive rounded" v-if="$store.getters.loginStatus" :email="$store.getters.email" />
               </b-navbar-nav>
             </b-collapse>
           </b-navbar>
@@ -49,6 +49,13 @@ export default {
 </script>
 
 <style>
+
+.responsive {
+    margin: auto;
+}
+.rounded {
+     border-radius: 50% !important;
+}
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
